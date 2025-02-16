@@ -32,7 +32,7 @@ class DocumentProcessor:
         )
         return self.vector_store
 
-    async def query_similar_documents(self, query: str, k: int = 5):
+    async def query_similar_documents(self, query: str, k: int = 1):
         if not self.vector_store:
             self.vector_store = Chroma(
                 persist_directory="./chroma_db",

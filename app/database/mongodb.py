@@ -3,7 +3,7 @@ from app.config import get_settings
 
 settings = get_settings()
 
-class MongoDB:
+class CopusMongoDB:
     client: AsyncIOMotorClient = None
 
     @classmethod
@@ -26,4 +26,10 @@ class MongoDB:
                 'content': document['content'],
                 'uuid': document['uuid']
             })
-        return documents 
+        return documents
+
+    @classmethod
+    async def get_document(cls, uuid: str):
+        db = cls.client[settings.mongodb_db_name]
+        collection = db[settings.mongodb_collection_name]
+        return await collection.find_one({"uuid": uuid}) 
