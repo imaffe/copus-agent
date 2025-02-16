@@ -1,6 +1,6 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.vectorstores import Chroma
 from typing import List, Dict
 import os
 
@@ -10,7 +10,7 @@ class DocumentProcessor:
             chunk_size=1000,
             chunk_overlap=200
         )
-        self.embeddings = OpenAIEmbeddings()
+        self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
         self.vector_store = None
 
     def process_documents(self, documents: List[Dict]):
