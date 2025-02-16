@@ -9,12 +9,12 @@ from typing import List, Dict
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    await CopusMongoDB.connect_to_mongodb()
-    documents = await CopusMongoDB.get_documents()
+    CopusMongoDB.connect_to_mongodb()
+    documents = CopusMongoDB.get_documents()
     document_processor.process_documents(documents)
     yield
     # Shutdown
-    await CopusMongoDB.close_mongodb_connection()
+    CopusMongoDB.close_mongodb_connection()
 
 app = FastAPI(lifespan=lifespan)
 document_processor = DocumentProcessor()
@@ -40,7 +40,7 @@ async def get_recommendations(query: DocumentQuery):
         doc_segment, _ = similar_docs[0]
         
         doc_uuid = doc_segment.metadata['uuid']
-        target_doc = await CopusMongoDB.get_document(doc_uuid)
+        target_doc = CopusMongoDB.get_document(doc_uuid)
         # Get recommendation reason
         recommend_reason = await llm_service.generate_recommendation_reason(
             query.document,
