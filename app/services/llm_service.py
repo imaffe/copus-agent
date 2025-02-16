@@ -1,7 +1,7 @@
-from langchain_community.chat_models import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
-from langchain.schema import HumanMessage, SystemMessage
+from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_openai import ChatOpenAI
 from typing import Dict
 
 class LLMService:
@@ -44,4 +44,9 @@ class LLMService:
             "query_doc": query_doc,
             "retrieved_doc": retrieved_doc
         })
-        return result 
+        return result.content
+
+    async def generate_response(self, prompt: str) -> str:
+        messages = [HumanMessage(content=prompt)]
+        response = await self.llm.ainvoke(messages)
+        return response.content 
